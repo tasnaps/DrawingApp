@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">DrawingApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="tooltip_new">New</string>
+    <string name="tooltip_save">Save</string>
+    <string name="tooltip_print">Print</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_new_info">Canvas will be cleared and all unsaved progress will be lost. Proceed?</string>
+</resources>
