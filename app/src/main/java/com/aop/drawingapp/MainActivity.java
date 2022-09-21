@@ -3,9 +3,7 @@ package com.aop.drawingapp;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.print.PrintHelper;
 

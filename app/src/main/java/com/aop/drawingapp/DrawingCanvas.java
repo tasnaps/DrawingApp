@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 
 public class DrawingCanvas extends View {
@@ -68,9 +69,17 @@ public class DrawingCanvas extends View {
     protected void onDraw(Canvas targetCanvas) {
         super.onDraw(targetCanvas);
 
-        for (PaintedPath p : Paths) {
-            targetCanvas.drawPath(p.path, p.paint);
+        if(){
+            //x, y, radius, paint
+            PaintedPath p = Paths.peekFirst();
+            targetCanvas.drawCircle(getX(), getY(), 10,p.paint);
+        }else{
+            for (PaintedPath p : Paths) {
+                targetCanvas.drawPath(p.path, p.paint);
+            }
         }
+
+
     }
 
     public void clearCanvas() {
@@ -78,6 +87,8 @@ public class DrawingCanvas extends View {
         // invalidate for redraw
         invalidate();
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -172,6 +183,8 @@ public class DrawingCanvas extends View {
 
         }
     }
+
+
 
 
     /**
