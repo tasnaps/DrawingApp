@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -20,20 +21,38 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 
 public class DrawingCanvas extends View {
     private LinkedList<PaintedPath> Paths = new LinkedList<>();
     private PaintedPath activePath;
-
     private int selectedPaint = 0;
     private Paint[] paints;
+    public String type = "line";
+    float x;
+    float y;
+    int alpha;
+
+
+    public void setX(float newX){
+        this.x =  newX;
+    }
+    public void setY(float newY)
+    {
+        this.y = newY;
+    }
+    public float getX(){
+        return x;
+    }
+    public float getY(){
+        return y;
+    }
 
     public DrawingCanvas(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         initializePaints();
     }
+
 
     private void initializePaints() {
         int[] colorCodes = new int[]{Color.BLACK, Color.WHITE,
@@ -51,9 +70,11 @@ public class DrawingCanvas extends View {
             p.setStrokeWidth(15f);
             p.setStyle(Paint.Style.STROKE);
             p.setStrokeJoin(Paint.Join.MITER);
-
             paints[i] = p;
         }
+    }
+    private void setAlpha(int alpha){
+        paints[selectedPaint].setAlpha(alpha);
     }
 
 
@@ -65,22 +86,14 @@ public class DrawingCanvas extends View {
         selectedPaint = paintNumber;
     }
 
+
+
     @Override
     protected void onDraw(Canvas targetCanvas) {
-        super.onDraw(targetCanvas);
-
-        if(){
-            //x, y, radius, paint
-            PaintedPath p = Paths.peekFirst();
-            targetCanvas.drawCircle(getX(), getY(), 10,p.paint);
-        }else{
-            for (PaintedPath p : Paths) {
-                targetCanvas.drawPath(p.path, p.paint);
-            }
+        for (PaintedPath p : Paths) {
+            targetCanvas.drawPath(p.path, p.paint);
         }
-
-
-    }
+        }
 
     public void clearCanvas() {
         Paths = new LinkedList<PaintedPath>();
@@ -88,24 +101,33 @@ public class DrawingCanvas extends View {
         invalidate();
     }
 
-
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        // grab touch coordinates
+        setX(event.getX());
+        setY(event.getY());
         float x = event.getX();
         float y = event.getY();
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 activePath = new PaintedPath(paints[selectedPaint]);
-                activePath.path.moveTo(x, y);
+
+                //todo moveTo tai draw cirlce if elsen mukaan
+                if (type.equals("line")) {
+                    activePath.path.moveTo(x, y);
+                }else if(type.equals("circle")) {
+                    activePath.path.addCircle(x, y, 10, Path.Direction.CW);
+                }
                 Paths.add(activePath);
                 break;
             case MotionEvent.ACTION_MOVE:
-                activePath.path.lineTo(x, y);
+                if(type.equals("line")) {
+                    activePath.path.lineTo(x, y);
+                } else if (type.equals("circle")) {
+                    activePath.path.addCircle(x, y, 10, Path.Direction.CW);
+                }
                 break;
+
         }
 
         // invalidate canvas for redraw
@@ -183,8 +205,6 @@ public class DrawingCanvas extends View {
 
         }
     }
-
-
 
 
     /**

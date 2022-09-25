@@ -1,5 +1,7 @@
 package com.aop.drawingapp;
 
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -19,14 +21,7 @@ import android.widget.Switch;
 
 
 public class DrawingToolsFragment extends Fragment {
-    Switch swDrawCircles;
     SeekBar sbStrokeWidth;
-    public boolean drawCircles = false;
-
-    public  boolean getDrawCircles(){
-        return drawCircles;
-    }
-
     public DrawingToolsFragment() {
         super(R.layout.fragment_drawing_tools);
     }
@@ -37,22 +32,10 @@ public class DrawingToolsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_drawing_tools, container, false);
         sbStrokeWidth = view.findViewById(R.id.sbStrokeWidth);
-        swDrawCircles = view.findViewById(R.id.swCircles);
         MainActivity main = (MainActivity) getActivity();
         setStrokeWidth(main.getActiveCanvas());
-
-        //switch functionality for drawing circles
-        swDrawCircles.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                drawCircles = b;
-            }
-        });
         return view;
     }
-
-
-
 
     private void setStrokeWidth(DrawingCanvas canvas) {
         Paint[] paints = canvas.getPaints();
@@ -64,6 +47,7 @@ public class DrawingToolsFragment extends Fragment {
                 for (Paint p : paints) {
                     p.setStrokeWidth(width);
                 }
+                //
             }
 
             @Override
